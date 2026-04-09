@@ -39,7 +39,7 @@ def get_normal_piece_moves(board: Board, row: int, col: int, piece: Piece) -> li
             if is_valid_position(new_row, new_col):
                 target_piece = get_piece(board, new_row, new_col)
                 if target_piece is None:
-                    moves.append(Move(row=new_row, col=new_col))
+                    moves.append(Move(from_row=row, from_col=col, row=new_row, col=new_col))
 
     capture_directions = [
         {"row_offset": -1, "col_offset": -1},
@@ -63,6 +63,8 @@ def get_normal_piece_moves(board: Board, row: int, col: int, piece: Piece) -> li
         if target_piece is None and is_opponent(piece, middle_piece):
             moves.append(
                 CaptureMove(
+                    from_col=col,
+                    from_row=row,
                     row=jump_row,
                     col=jump_col,
                     captured_row=middle_row,

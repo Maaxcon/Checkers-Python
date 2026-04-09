@@ -14,6 +14,8 @@ class Piece:
 
 @dataclass
 class Move:
+    from_row: int
+    from_col: int
     row: int
     col: int
     type: Literal["move"] = "move"
@@ -21,11 +23,15 @@ class Move:
 
 @dataclass
 class CaptureMove:
+    from_row: int
+    from_col: int
     row: int
     col: int
     captured_row: int
     captured_col: int
     type: Literal["capture"] = "capture"
+
+
 
 
 MoveType = Union[Move, CaptureMove]
