@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .board import clone_board, get_piece, is_valid_position
-from .constants import BOARD, PLAYERS
+from .constants import BOARD, PLAYERS, TOP_ROW_INDEX
 from .moves import get_moves_for_piece
 from .types import Board, CaptureMove, MoveType, Piece, Player
 
@@ -41,7 +41,7 @@ def apply_move(board: Board, move: MoveType) -> Board:
         new_board[move.captured_row][move.captured_col] = None
 
     reached_promotion_row = (
-        (piece.player == PLAYERS.LIGHT and move.row == 0)
+        (piece.player == PLAYERS.LIGHT and move.row == TOP_ROW_INDEX)
         or (piece.player == PLAYERS.DARK and move.row == BOARD.ROWS - 1)
     )
     is_king = piece.is_king or reached_promotion_row

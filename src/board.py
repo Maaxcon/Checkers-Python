@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from .constants import BOARD, PLAYERS
+from .constants import BOARD, DARK_SQUARE_PARITY, MIN_INPUT_INDEX, PLAYERS
 from .types import Board, Piece, Player
 
 
@@ -15,7 +15,7 @@ def create_initial_board() -> Board:
 
     for row in range(BOARD.ROWS):
         for col in range(BOARD.COLS):
-            if (row + col) % 2 != 0:
+            if (row + col) % 2 == DARK_SQUARE_PARITY:
                 if row < BOARD.PIECE_ROWS:
                     grid[row][col] = create_piece(PLAYERS.DARK)
                 elif row >= BOARD.ROWS - BOARD.PIECE_ROWS:
@@ -32,7 +32,7 @@ def clone_board(board: Board) -> Board:
 
 
 def is_valid_position(row: int, col: int) -> bool:
-    return 0 <= row < BOARD.ROWS and 0 <= col < BOARD.COLS
+    return MIN_INPUT_INDEX <= row < BOARD.ROWS and MIN_INPUT_INDEX <= col < BOARD.COLS
 
 
 def get_piece(board: Board, row: int, col: int) -> Optional[Piece]:

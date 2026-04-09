@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .board import get_piece, is_valid_position
-from .constants import CAPTURE_DIRS, DIRECTIONS, GAME_SETTINGS, PLAYERS, SIDE_DIRS
+from .constants import CAPTURE_DIRS, DIRECTIONS, GAME_SETTINGS, HORIZONTAL_DIRS, PLAYERS
 from .types import Board, CaptureMove, Move, MoveType, Piece
 
 
@@ -31,7 +31,7 @@ def get_normal_piece_moves(board: Board, row: int, col: int, piece: Piece) -> li
     directions_y = get_move_directions(piece)
 
     for direction_y in directions_y:
-        for direction_x in SIDE_DIRS:
+        for direction_x in HORIZONTAL_DIRS:
             new_row = row + direction_y
             new_col = col + direction_x
 

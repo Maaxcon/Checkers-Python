@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .board import create_initial_board
-from .constants import BOARD, PLAYERS
+from .constants import BOARD, COORD_PARTS_COUNT, MIN_INPUT_INDEX, PLAYERS
 from .logic import (
     apply_move,
     get_chain_capture_moves,
@@ -126,8 +126,8 @@ def _read_move_selection(moves: list[MoveType]) -> Optional[MoveType]:
             print("Enter a number (for example: 0).")
             continue
 
-        if move_index < 0 or move_index >= len(moves):
-            print(f"Choose a value from 0 to {len(moves) - 1}.")
+        if move_index < MIN_INPUT_INDEX or move_index >= len(moves):
+            print(f"Choose a value from {MIN_INPUT_INDEX} to {len(moves) - 1}.")
             continue
 
         return moves[move_index]
@@ -159,7 +159,7 @@ def _read_coords(prompt: str) -> Optional[tuple[int, int]]:
             return None
 
         parts = raw.replace(",", " ").split()
-        if len(parts) != 2:
+        if len(parts) != COORD_PARTS_COUNT:
             print("Enter two numbers: row col")
             continue
 
@@ -170,10 +170,15 @@ def _read_coords(prompt: str) -> Optional[tuple[int, int]]:
             print("Enter valid integers, for example: 2 3")
             continue
 
-        if row < 0 or row >= BOARD.ROWS or col < 0 or col >= BOARD.COLS:
+        if (
+            row < MIN_INPUT_INDEX
+            or row >= BOARD.ROWS
+            or col < MIN_INPUT_INDEX
+            or col >= BOARD.COLS
+        ):
             print(
-                f"Coordinates must be in range: row 0-{BOARD.ROWS - 1}, "
-                f"col 0-{BOARD.COLS - 1}"
+                f"Coordinates must be in range: row {MIN_INPUT_INDEX}-{BOARD.ROWS - 1}, "
+                f"col {MIN_INPUT_INDEX}-{BOARD.COLS - 1}"
             )
             continue
 
