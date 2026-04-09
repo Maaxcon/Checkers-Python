@@ -94,7 +94,7 @@ def get_king_moves(board: Board, row: int, col: int, piece: Piece) -> list[MoveT
 
             if found_enemy is None:
                 if target_piece is None:
-                    moves.append(Move(row=current_row, col=current_col))
+                    moves.append(Move(from_row=row, from_col=col, row=current_row, col=current_col))
                 elif is_opponent(piece, target_piece):
                     found_enemy = (current_row, current_col)
                 else:
@@ -103,6 +103,8 @@ def get_king_moves(board: Board, row: int, col: int, piece: Piece) -> list[MoveT
                 if target_piece is None:
                     moves.append(
                         CaptureMove(
+                            from_row=row,
+                            from_col=col,
                             row=current_row,
                             col=current_col,
                             captured_row=found_enemy[0],
