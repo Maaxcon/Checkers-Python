@@ -4,7 +4,13 @@ from typing import Optional
 
 from .board import create_initial_board
 from .constants import BOARD, PLAYERS
-from .logic import apply_move, get_chain_capture_moves, get_legal_moves_for_piece, get_winner
+from .logic import (
+    apply_move,
+    get_chain_capture_moves,
+    get_legal_moves_for_piece,
+    get_opponent,
+    get_winner,
+)
 from .types import Board, MoveType, Piece, Player
 
 
@@ -76,7 +82,7 @@ def run_game_loop() -> None:
             selected_move = next_move
             board = apply_move(board, selected_move)
 
-        turn = _get_opponent(turn)
+        turn = get_opponent(turn)
 
 
 def _read_piece_selection(board: Board, turn: Player) -> Optional[tuple[int, int]]:
@@ -172,12 +178,6 @@ def _read_coords(prompt: str) -> Optional[tuple[int, int]]:
             continue
 
         return row, col
-
-
-def _get_opponent(player: Player) -> Player:
-    if player == PLAYERS.LIGHT:
-        return PLAYERS.DARK
-    return PLAYERS.LIGHT
 
 
 if __name__ == "__main__":

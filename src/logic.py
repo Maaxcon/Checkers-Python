@@ -57,7 +57,7 @@ def get_winner(board: Board, turn: Player) -> Optional[Player]:
         return PLAYERS.LIGHT
 
     if not get_legal_moves_for_player(board, turn):
-        return _get_opponent(turn)
+        return get_opponent(turn)
 
     return None
 
@@ -120,7 +120,7 @@ def _filter_capture_moves(moves: list[MoveType]) -> list[MoveType]:
     return [move for move in moves if move.type == "capture"]
 
 
-def _get_opponent(player: Player) -> Player:
+def get_opponent(player: Player) -> Player:
     if player == PLAYERS.LIGHT:
         return PLAYERS.DARK
     return PLAYERS.LIGHT
