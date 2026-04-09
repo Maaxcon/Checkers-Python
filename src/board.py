@@ -11,12 +11,7 @@ def create_piece(player: Player, is_king: bool = False) -> Piece:
 
 
 def create_initial_board() -> Board:
-    grid: Board = []
-    for _row in range(BOARD.ROWS):
-        grid_row: list[Optional[Piece]] = []
-        for _col in range(BOARD.COLS):
-            grid_row.append(None)
-        grid.append(grid_row)
+    grid: Board = [[None] * BOARD.COLS for _ in range(BOARD.ROWS)]
 
     for row in range(BOARD.ROWS):
         for col in range(BOARD.COLS):
