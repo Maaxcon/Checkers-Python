@@ -60,29 +60,33 @@ def run_game_loop() -> None:
             return
 
         board = apply_move(board, selected_move)
-
-        while selected_move.type == "capture":
-            chain_moves = get_chain_capture_moves(board, selected_move.row, selected_move.col)
-            if not chain_moves:
-                break
-
-            print()
-            print_board(board)
-            print()
-            print(
-                "Chain capture is required from "
-                f"({selected_move.row}, {selected_move.col})."
-            )
-
-            next_move = _read_move_selection(chain_moves)
-            if next_move is None:
-                print("Game stopped.")
-                return
-
-            selected_move = next_move
-            board = apply_move(board, selected_move)
+        board, selected_move = _handle_chain_captures(board, selected_move)
+        if selected_move is None:
+            print("Game stopped.")
+            return
 
         turn = get_opponent(turn)
+
+
+def _handle_chain_captures(board: Board, last_move: MoveType) -> tuple[Board, Optional[MoveType]]:
+    while last_move.type == "capture":
+        chain_moves = get_chain_capture_moves(board, last_move.row, last_move.col)
+        if not chain_moves:
+            break
+
+        print()
+        print_board(board)
+        print()
+        print(f"Chain capture is required from ({last_move.row}, {last_move.col}).")
+
+        next_move = _read_move_selection(chain_moves)
+        if next_move is None:
+            return board, None
+
+        last_move = next_move
+        board = apply_move(board, last_move)
+
+    return board, last_move
 
 
 def _read_piece_selection(board: Board, turn: Player) -> Optional[tuple[int, int]]:
