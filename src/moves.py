@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .board import get_piece, is_valid_position
-from .constants import DIRECTIONS, GAME_SETTINGS, PLAYERS
+from .constants import CAPTURE_DIRS, DIRECTIONS, GAME_SETTINGS, PLAYERS, SIDE_DIRS
 from .types import Board, CaptureMove, Move, MoveType, Piece
 
 
@@ -29,10 +29,9 @@ def get_moves_for_piece(board: Board, row: int, col: int) -> list[MoveType]:
 def get_normal_piece_moves(board: Board, row: int, col: int, piece: Piece) -> list[MoveType]:
     moves: list[MoveType] = []
     directions_y = get_move_directions(piece)
-    directions_x = [-1, 1]
 
     for direction_y in directions_y:
-        for direction_x in directions_x:
+        for direction_x in SIDE_DIRS:
             new_row = row + direction_y
             new_col = col + direction_x
 
@@ -41,18 +40,11 @@ def get_normal_piece_moves(board: Board, row: int, col: int, piece: Piece) -> li
                 if target_piece is None:
                     moves.append(Move(from_row=row, from_col=col, row=new_row, col=new_col))
 
-    capture_directions = [
-        {"row_offset": -1, "col_offset": -1},
-        {"row_offset": -1, "col_offset": 1},
-        {"row_offset": 1, "col_offset": -1},
-        {"row_offset": 1, "col_offset": 1},
-    ]
-
-    for direction in capture_directions:
-        jump_row = row + direction["row_offset"] * GAME_SETTINGS.JUMP_DISTANCE
-        jump_col = col + direction["col_offset"] * GAME_SETTINGS.JUMP_DISTANCE
-        middle_row = row + direction["row_offset"]
-        middle_col = col + direction["col_offset"]
+    for row_offset, col_offset in CAPTURE_DIRS:
+        jump_row = row + row_offset * GAME_SETTINGS.JUMP_DISTANCE
+        jump_col = col + col_offset * GAME_SETTINGS.JUMP_DISTANCE
+        middle_row = row + row_offset
+        middle_col = col + col_offset
 
         if not is_valid_position(jump_row, jump_col):
             continue
@@ -77,16 +69,10 @@ def get_normal_piece_moves(board: Board, row: int, col: int, piece: Piece) -> li
 
 def get_king_moves(board: Board, row: int, col: int, piece: Piece) -> list[MoveType]:
     moves: list[MoveType] = []
-    directions = [
-        {"row_offset": -1, "col_offset": -1},
-        {"row_offset": -1, "col_offset": 1},
-        {"row_offset": 1, "col_offset": -1},
-        {"row_offset": 1, "col_offset": 1},
-    ]
 
-    for direction in directions:
-        current_row = row + direction["row_offset"]
-        current_col = col + direction["col_offset"]
+    for row_offset, col_offset in CAPTURE_DIRS:
+        current_row = row + row_offset
+        current_col = col + col_offset
         found_enemy: Optional[tuple[int, int]] = None
 
         while is_valid_position(current_row, current_col):
@@ -114,7 +100,7 @@ def get_king_moves(board: Board, row: int, col: int, piece: Piece) -> list[MoveT
                 else:
                     break
 
-            current_row += direction["row_offset"]
-            current_col += direction["col_offset"]
+            current_row += row_offset
+            current_col += col_offset
 
     return moves
