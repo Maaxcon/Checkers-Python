@@ -21,22 +21,18 @@ def apply_move(board: Board, move: MoveType) -> Board:
     new_board = clone_board(board)
 
     piece = new_board[move.from_row][move.from_col]
-    if piece is None:
-        raise ValueError("No piece at source position")
-    if new_board[move.row][move.col] is not None:
-        raise ValueError("Target square is not empty")
+    assert piece is not None, "Legal move must have a source piece"
+    assert new_board[move.row][move.col] is None, "Legal move must target an empty square"
 
     new_board[move.from_row][move.from_col] = None
 
     if move.type == "capture":
-        if not is_valid_position(move.captured_row, move.captured_col):
-            raise ValueError("Captured position is out of board bounds")
-
         captured_piece = new_board[move.captured_row][move.captured_col]
-        if captured_piece is None:
-            raise ValueError("No piece to capture at captured position")
-        if captured_piece.player == piece.player:
-            raise ValueError("Cannot capture your own piece")
+        assert is_valid_position(
+            move.captured_row, move.captured_col
+        ), "Legal capture must have valid captured coordinates"
+        assert captured_piece is not None, "Legal capture must have a captured piece"
+        assert captured_piece.player != piece.player, "Legal capture must target an opponent piece"
 
         new_board[move.captured_row][move.captured_col] = None
 
