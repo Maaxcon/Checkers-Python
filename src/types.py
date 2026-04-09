@@ -5,14 +5,13 @@ from typing import Literal, Optional, Union
 
 Player = Literal["light", "dark"]
 
-
-@dataclass
+@dataclass(frozen=True)
 class Piece:
     player: Player
     is_king: bool = False
 
 
-@dataclass
+@dataclass(frozen=True)
 class Move:
     from_row: int
     from_col: int
@@ -21,7 +20,7 @@ class Move:
     type: Literal["move"] = "move"
 
 
-@dataclass
+@dataclass(frozen=True)
 class CaptureMove:
     from_row: int
     from_col: int
